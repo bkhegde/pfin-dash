@@ -1,0 +1,176 @@
+import { DELETE_ICON_HTML, fmtAmount, fmtDate, fmtPct, fmtUnits } from "../../services/formatters";
+import type { ColumnDefinition } from "tabulator-tables";
+import type { CellComponent as CC } from "tabulator-tables";
+
+export const MF_TXN_DELETE_FIELD = "_delete";
+
+export const mfTransactionColumns: ColumnDefinition[] = [
+  {
+    title: "Date",
+    field: "txn_date",
+    sorter: "date",
+    sorterParams: { format: "yyyy-MM-dd" },
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtDate(c.getValue()),
+  },
+  { title: "Type", field: "type", sorter: "string", width: 100 },
+  {
+    title: "Units",
+    field: "units",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtUnits(c.getValue()),
+  },
+  {
+    title: "Residual",
+    field: "residual_units",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtUnits(c.getValue()),
+  },
+  {
+    title: "NAV",
+    field: "nav",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtUnits(c.getValue()),
+  },
+  {
+    title: "Amount",
+    field: "amount",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtAmount(c.getValue()),
+  },
+  {
+    title: "Balance",
+    field: "balance",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtAmount(c.getValue()),
+  },
+  { title: "Tax Type", field: "tax_type", sorter: "string", width: 100 },
+  { title: "Tax Desc", field: "tax_description", sorter: "string", width: 100 },
+  {
+    title: "Tax Amt",
+    field: "tax_amount",
+    sorter: "number",
+    width: 100,
+    cssClass: "mf-num-cell",
+    formatter: (c: CC) => fmtAmount(c.getValue()),
+  },
+  { title: "Txn ID", field: "txn_id", sorter: "number", width: 100, cssClass: "mf-num-cell" },
+  { title: "Folio", field: "folio", sorter: "string", width: 100 },
+  { title: "ISIN", field: "isin", sorter: "string", width: 100 },
+  { title: "AMFI", field: "amfi", sorter: "string", width: 100 },
+  { title: "Description", field: "description", sorter: "string", width: 100 },
+  { title: "Source File", field: "source_file", sorter: "string", width: 100 },
+  {
+    title: "",
+    field: MF_TXN_DELETE_FIELD,
+    width: 60,
+    hozAlign: "center",
+    headerSort: false,
+    formatter: () => `<button class="mf-row-delete-btn" title="Delete transaction">${DELETE_ICON_HTML}</button>`,
+  },
+];
+
+export function getHoldingsColumns(grandTotals: {
+  abs_gain_pct: number;
+  xirr_pct: number;
+}): ColumnDefinition[] {
+  return [
+    {
+      title: "Scheme / Folio",
+      field: "scheme_or_folio",
+      sorter: "string",
+      resizable: true,
+      widthGrow: 2.4,
+    },
+    {
+      title: "Units",
+      field: "total_units",
+      sorter: "number",
+      hozAlign: "right",
+      headerHozAlign: "right",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtUnits(c.getValue()),
+    },
+    {
+      title: "Invested",
+      field: "invested_amount",
+      sorter: "number",
+      hozAlign: "right",
+      headerHozAlign: "right",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtAmount(c.getValue()),
+      bottomCalc: "sum",
+      bottomCalcFormatter: (c: CC) => fmtAmount(c.getValue()),
+    },
+    {
+      title: "Current Value",
+      field: "current_value",
+      sorter: "number",
+      hozAlign: "right",
+      headerHozAlign: "right",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtAmount(c.getValue()),
+      bottomCalc: "sum",
+      bottomCalcFormatter: (c: CC) => fmtAmount(c.getValue()),
+    },
+    {
+      title: "Abs Gain%",
+      field: "abs_gain_pct",
+      sorter: "number",
+      hozAlign: "center",
+      headerHozAlign: "center",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtPct(c.getValue()),
+      bottomCalc: () => grandTotals.abs_gain_pct, // Custom value for bottom calc
+      bottomCalcFormatter: (c: CC) => fmtPct(c.getValue()),
+    },
+    {
+      title: "XIRR%",
+      field: "xirr_pct",
+      sorter: "number",
+      hozAlign: "center",
+      headerHozAlign: "center",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtPct(c.getValue()),
+      bottomCalc: () => grandTotals.xirr_pct, // Custom value for bottom calc
+      bottomCalcFormatter: (c: CC) => fmtPct(c.getValue()),
+    },
+    {
+      title: "NAV",
+      field: "nav",
+      sorter: "number",
+      hozAlign: "right",
+      headerHozAlign: "right",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtUnits(c.getValue()),
+    },
+    {
+      title: "NAV Dt",
+      field: "nav_dt",
+      sorter: "date",
+      sorterParams: { format: "yyyy-MM-dd" },
+      hozAlign: "center",
+      headerHozAlign: "center",
+      resizable: true,
+      cssClass: "mf-num-cell",
+      formatter: (c: CC) => fmtDate(String(c.getValue() ?? "")),
+    },
+  ];
+}

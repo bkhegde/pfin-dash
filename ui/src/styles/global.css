@@ -1,0 +1,35 @@
+:root {
+  --mf-bg: #f3f5fb;
+  --mf-surface: #ffffff;
+  --mf-border: #dde3ef;
+  --mf-text: #1e2637;
+  --mf-muted: #59647d;
+  --mf-brand: #0d6772;
+  --mf-brand-strong: #0a4e56;
+  --mf-danger: #8d2228;
+  --mf-overlay: rgba(15, 23, 42, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--mf-text);
+  background: radial-gradient(circle at top, #ecf2ff 0%, var(--mf-bg) 45%);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -m compute.eq_functions)",
+      "Bash(npm run *)",
+      "Bash(npx svelte-check *)",
+      "Bash(timeout 8 .venv/Scripts/python.exe main.py)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(tasklist)",
+      "Bash(powershell -Command \"Get-Process python -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command 'Get-Process | Where-Object {$_.MainWindowTitle -like '\\\\''*PFIN*'\\\\''} | Stop-Process -Force')",
+      "Bash(mkdir -p C:/PFin-Dash/.claude)",
+      "Bash(git stash *)",
+      "Bash(PYTHONIOENCODING=utf-8 .venv/Scripts/python.exe -m compute.nps_functions)",
+      "Bash(powershell -Command \"Get-Item data/equity_transactions.csv | Select-Object LastWriteTime, CreationTime, Length\")"
+    ]
+  }
+}

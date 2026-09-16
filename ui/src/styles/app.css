@@ -1,0 +1,433 @@
+.mf-page {
+  margin: 16px;
+  background: var(--mf-surface);
+  border: 1px solid var(--mf-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(8, 15, 33, 0.1);
+}
+
+.app-shell {
+  padding: 0 0 16px;
+}
+
+.report-placeholder {
+  margin: 0 16px 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbfc 100%);
+  border: 1px solid var(--mf-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(8, 15, 33, 0.08);
+}
+
+.report-placeholder__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--mf-border);
+}
+
+.report-placeholder__title {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.report-placeholder__subtitle {
+  font-size: 0.85rem;
+  color: var(--mf-muted);
+}
+
+.report-placeholder__body {
+  display: grid;
+  gap: 16px;
+  padding: 18px 20px 20px;
+}
+
+.report-placeholder__description {
+  max-width: 72ch;
+  line-height: 1.5;
+}
+
+.report-placeholder__panel {
+  padding: 16px;
+  border: 1px solid var(--mf-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.report-placeholder__panel--muted {
+  background: #f8fafe;
+}
+
+.report-placeholder__panel-title {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.report-placeholder__list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--mf-text);
+  line-height: 1.6;
+}
+
+.mf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--mf-border);
+}
+
+.mf-title {
+  /* Table header text (.tabulator) is 14px - this should read as a heading but not dominate
+     the page, so it only needs to sit slightly above that, not the ~30px it used to be. */
+  font-size: 16px;
+  margin: 0;
+}
+
+.mf-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mf-status-inline {
+  color: var(--mf-muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.mf-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mf-btn {
+  padding: 8px 12px;
+  border: 1px solid #c8d4e8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--mf-text);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.mf-btn:hover {
+  background: #f3f6fc;
+}
+
+.mf-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mf-btn-primary {
+  background: var(--mf-brand);
+  border-color: var(--mf-brand);
+  color: #ffffff;
+}
+
+.mf-btn-primary:hover {
+  background: var(--mf-brand-strong);
+}
+
+.mf-row-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #e0332c;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.mf-row-delete-btn:hover {
+  background: #c62828;
+}
+
+.mf-row-delete-btn svg {
+  display: block;
+}
+
+.mf-table-wrap {
+  padding: 0 12px 12px;
+  overflow: auto;
+  max-height: calc(100vh - 140px);
+}
+
+.mf-summary-wrap {
+  max-height: none;
+}
+
+.mf-summary-table {
+  width: 100%;
+  margin-top: 12px;
+  border: 1px solid var(--mf-border);
+  border-radius: 10px;
+  overflow: hidden;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.mf-summary-table th {
+  background: #0f172a;
+  color: #ffffff;
+  text-align: right;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+
+.mf-summary-table th:first-child,
+.mf-summary-table td:first-child {
+  text-align: left;
+}
+
+.mf-summary-table td {
+  padding: 10px 14px;
+  text-align: right;
+  border-top: 1px solid var(--mf-border);
+}
+
+.mf-summary-table tbody tr:nth-child(odd) {
+  background: #e5f4f6;
+}
+
+.mf-summary-total-row {
+  background: #d3edf0 !important;
+  font-weight: 700;
+  border-top: 2px solid var(--mf-border);
+}
+
+.mf-table {
+  margin-top: 12px;
+  border: 1px solid var(--mf-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mf-error {
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: var(--mf-danger);
+  background: #fff2f2;
+}
+
+.mf-modal-overlay,
+.mf-txn-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: var(--mf-overlay);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.mf-modal {
+  width: min(var(--mf-modal-width, 640px), 100%);
+  max-height: min(88vh, 860px);
+  background: var(--mf-surface);
+  border: 1px solid var(--mf-border);
+  border-radius: 12px;
+  box-shadow: 0 20px 48px rgba(2, 6, 23, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mf-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--mf-border);
+}
+
+.mf-modal-body {
+  padding: 14px 16px;
+  min-height: 0;
+}
+
+.mf-modal-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--mf-border);
+  background: #f8fafe;
+}
+
+.mf-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mf-form-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.mf-field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.mf-field-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd6ea;
+  border-radius: 8px;
+}
+
+.mf-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.mf-inline-input {
+  width: 220px;
+}
+
+.mf-status-note {
+  margin-right: auto;
+  color: var(--mf-muted);
+  font-size: 0.82rem;
+}
+
+.mf-txn-modal {
+  position: fixed;
+  width: min(1100px, calc(100vw - 32px));
+  height: min(700px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--mf-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+  resize: both;
+  overflow: hidden;
+}
+
+.mf-txn-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #f5f7fc;
+  border-bottom: 1px solid var(--mf-border);
+  cursor: move;
+  user-select: none;
+}
+
+.mf-txn-title h2 {
+  font-size: 1rem;
+}
+
+.mf-txn-subtitle {
+  font-size: 0.82rem;
+  color: var(--mf-muted);
+}
+
+.mf-txn-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: 8px;
+}
+
+.mf-txn-table {
+  flex: 1;
+  min-height: 0;
+}
+
+.mf-txn-footer {
+  padding: 6px 10px;
+  border-top: 1px solid var(--mf-border);
+  font-size: 0.82rem;
+  color: var(--mf-muted);
+  background: #f8fafe;
+}
+
+.mf-txn-footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.tabulator {
+  border: 0;
+  font-size: 14px;
+}
+
+/* Force a consistent table header style across all holdings tables. */
+.tabulator .tabulator-header,
+.tabulator .tabulator-col {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Standard zebra striping for data rows. */
+.tabulator .tabulator-tableholder .tabulator-row {
+  background: #ffffff;
+}
+
+.tabulator .tabulator-tableholder .tabulator-row:nth-child(even) {
+  background: #ebebeb;
+}
+
+/* Standard footer (bottom calc) styling. */
+.tabulator .tabulator-calcs-holder .tabulator-row,
+.tabulator .tabulator-footer .tabulator-row {
+  background: #b3b3b3;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* Applied via each numeric/date column's `cssClass` (see *_table_columns.ts / *_transactions_columns.ts)
+   so figures line up vertically for easy scanning instead of shifting with each digit's natural width. */
+.mf-num-cell {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "SFMono-Regular", Menlo, "Liberation Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.mf-parent-row {
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .mf-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report-placeholder__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mf-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .mf-toolbar {
+    width: 100%;
+  }
+
+  .mf-btn {
+    flex: 1;
+    min-width: 160px;
+  }
+}

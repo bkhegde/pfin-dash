@@ -1,0 +1,9 @@
+casparser
+duckdb
+httpx
+pandas
+polars
+pywebview
+pyxirr
+yfinance
+pyarrow
