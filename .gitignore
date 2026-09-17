@@ -13,12 +13,13 @@ ENV/
 env.bak/
 venv.bak/
 node_modules
+.claude
 
 # Data files
 data/
 tmp/
 dist/
-
+*.duckdb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
