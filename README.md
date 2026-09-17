@@ -1,6 +1,6 @@
 # PFin-Dash
 
-A personal finance dashboard for tracking Mutual Funds, Equity (stocks), and NPS (National Pension System) holdings in one place — upload your own statements, refresh live prices, and see consolidated gains and XIRR. Runs entirely on your machine as a desktop app; your financial data never leaves your computer.
+A personal finance dashboard for tracking Mutual Funds, Equity (NSE traded stocks), NPS (National Pension System) holdings and FD/Bonds/PPF in one place — upload your own statements, refresh live prices, and see consolidated gains and XIRR. Runs entirely on your machine as a desktop app; your financial data never leaves your computer.
 
 ## Features
 
