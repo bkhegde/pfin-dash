@@ -79,3 +79,52 @@ python main.py
 A fresh `data/PFin.duckdb` is created automatically on first run — no separate database setup needed. Upload your own CAS PDF, equity CSV, or NPS statements from within the app to get started.
 
 For frontend development, `npm run dev` inside `ui/` starts a Vite dev server, but note that `window.pywebview.api` is only available inside the actual pywebview window — rebuild and restart `python main.py` to see backend changes reflected.
+
+## Build Windows Executable (Windows 10/11)
+
+This project now includes a PyInstaller setup to produce a native `.exe`.
+
+### Quick Build
+
+Run this from the project root:
+
+```powershell
+./build_windows_exe.ps1
+```
+
+The script will:
+
+- build the Svelte frontend into `ui/dist`
+- install/update `pyinstaller`
+- compile the app using `pfin_dash.spec`
+
+Output:
+
+- executable: `dist/PFIN-Dash/PFIN-Dash.exe`
+
+### Deployment Notes
+
+- Target OS: Windows 10/11 (64-bit)
+- The target machine needs Microsoft Edge WebView2 Runtime (usually already present on modern Windows installations).
+
+### Manual Build (optional)
+
+```powershell
+cd ui
+npm install
+npm run build
+cd ..
+pip install pyinstaller
+pyinstaller --noconfirm --clean pfin_dash.spec
+```
+
+### Data Location in Packaged App
+
+When running from source, DuckDB stays in `data/PFin.duckdb`.
+When running as a packaged executable, data is written to:
+
+- `%LOCALAPPDATA%/PFIN-Dash/data/PFin.duckdb`
+
+You can override this with:
+
+- `PFIN_DASH_DATA_DIR` environment variable

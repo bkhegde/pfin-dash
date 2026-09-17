@@ -1,18 +1,34 @@
 import webview
 from pathlib import Path
 import logging
+import sys
 from api import Api
 
 logger = logging.getLogger(__name__)
-ROOT = Path(__file__).parent
+
+
+def _get_runtime_root() -> Path:
+	"""
+	Return the root directory that contains bundled static assets.
+	
+	In development, this is the project root next to this file.
+	In a PyInstaller executable, this is the temporary extraction root (_MEIPASS)
+	that contains bundled files such as ui/dist.
+	"""
+	if getattr(sys, "frozen", False):
+		return Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+	return Path(__file__).parent
 
 def main() -> None:
 
-	html_path = ROOT/ 'ui' / 'dist'
+	runtime_root = _get_runtime_root()
+	html_path = runtime_root / "ui" / "dist" / "index.html"
+	if not html_path.exists():
+		raise FileNotFoundError(f"UI build not found at: {html_path}")
 	
 	webview.create_window(
 		title="PFIN-Dash",
-        url = f"{html_path}/index.html",
+		url=html_path.resolve().as_uri(),
 		js_api=Api(),
 		width=1920,
 		height=1080,

@@ -6,6 +6,8 @@
 from pathlib import Path
 import logging
 from threading import Lock
+import os
+import sys
 import duckdb
 
 logger = logging.getLogger(__name__)
@@ -14,7 +16,34 @@ _SCHEMA_INIT_LOCK = Lock()
 _SCHEMA_INITIALIZED = False
 
 ROOT = Path(__file__).parent.parent
-DB_PATH = ROOT / "data" / "PFin.duckdb"
+
+
+def _is_frozen() -> bool:
+    return bool(getattr(sys, "frozen", False))
+
+
+def _get_data_dir() -> Path:
+    """
+    Resolve a writable data directory.
+
+    - Development: <repo>/data
+    - Packaged executable: %LOCALAPPDATA%/PFIN-Dash/data
+    - Optional override: PFIN_DASH_DATA_DIR env var
+    """
+    env_override = os.environ.get("PFIN_DASH_DATA_DIR", "").strip()
+    if env_override:
+        return Path(env_override)
+
+    if _is_frozen():
+        local_app_data = os.environ.get("LOCALAPPDATA", "").strip()
+        base_dir = Path(local_app_data) if local_app_data else Path.home() / "AppData" / "Local"
+        return base_dir / "PFIN-Dash" / "data"
+
+    return ROOT / "data"
+
+
+DATA_DIR = _get_data_dir()
+DB_PATH = DATA_DIR / "PFin.duckdb"
 
 TABLE_DDL = {
     "mf_transactions": """
@@ -289,7 +318,7 @@ def get_connection() -> duckdb.DuckDBPyConnection:
 
     global _SCHEMA_INITIALIZED
 
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     db_preexists = DB_PATH.exists()
     conn = duckdb.connect(str(DB_PATH))
 
