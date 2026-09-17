@@ -134,40 +134,40 @@
   onDestroy(() => table?.destroy());
 </script>
 
-<main class="mf-page">
-  <header class="mf-header">
-    <h1 class="mf-title">SGB - Holding Statement</h1>
+<main class="app-page">
+  <header class="app-header">
+    <h1 class="app-title">SGB - Holding Statement</h1>
 
-    <div class="mf-header-actions">
+    <div class="app-header-actions">
       {#if status}
-        <span class="mf-status-inline">{status}</span>
+        <span class="app-status">{status}</span>
       {/if}
 
-      <div class="mf-toolbar">
-        <button class="mf-btn" onclick={() => (addModalOpen = true)}>
+      <div class="app-toolbar">
+        <button class="app-button" onclick={() => (addModalOpen = true)}>
           Add SGB Holding
         </button>
       </div>
     </div>
   </header>
 
-  <section class="mf-table-wrap">
-    <div class="mf-inline-form">
-      <label class="mf-field-label" for="sgb-gold-price">Gold Price</label>
+  <section class="app-table-wrap">
+    <div class="app-inline-form">
+      <label class="app-field-label" for="sgb-gold-price">Gold Price</label>
       <input
         id="sgb-gold-price"
-        class="mf-field-input mf-inline-input"
+        class="app-field-input app-inline-input"
         type="number"
         step="0.01"
         min="0"
         bind:value={goldPriceDraft}
       />
-      <button class="mf-btn mf-btn-primary" onclick={saveGoldPrice}>Save Price</button>
+      <button class="app-button app-button--primary" onclick={saveGoldPrice}>Save Price</button>
     </div>
 
-    <div class="mf-table" bind:this={tableContainer}></div>
+    <div class="app-table" bind:this={tableContainer}></div>
     {#if error}
-      <p class="mf-error">{error}</p>
+      <p class="app-error">{error}</p>
     {/if}
   </section>
 </main>

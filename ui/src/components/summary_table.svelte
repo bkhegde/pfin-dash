@@ -20,13 +20,13 @@
   );
 </script>
 
-<main class="mf-page">
-  <header class="mf-header">
-    <h1 class="mf-title">Portfolio Summary</h1>
+<main class="app-page">
+  <header class="app-header">
+    <h1 class="app-title">Portfolio Summary</h1>
   </header>
 
-  <section class="mf-table-wrap mf-summary-wrap">
-    <table class="mf-summary-table">
+  <section class="app-table-wrap app-summary-wrap">
+    <table class="app-summary-table">
       <thead>
         <tr>
           <th>Asset Class</th>
@@ -40,18 +40,18 @@
         {#each rows as row (row.label)}
           <tr>
             <td>{row.label}</td>
-            <td class="mf-num-cell">{fmtAmount(row.totals.invested_amount)}</td>
-            <td class="mf-num-cell">{fmtAmount(row.totals.current_value)}</td>
-            <td class="mf-num-cell">{fmtPct(row.totals.abs_gain_pct)}</td>
-            <td class="mf-num-cell">{fmtPct(row.totals.xirr_pct)}</td>
+            <td class="app-num-cell">{fmtAmount(row.totals.invested_amount)}</td>
+            <td class="app-num-cell">{fmtAmount(row.totals.current_value)}</td>
+            <td class="app-num-cell">{fmtPct(row.totals.abs_gain_pct)}</td>
+            <td class="app-num-cell">{fmtPct(row.totals.xirr_pct)}</td>
           </tr>
         {/each}
-        <tr class="mf-summary-total-row">
+        <tr class="app-summary-total-row">
           <td>Grand Total</td>
-          <td class="mf-num-cell">{fmtAmount(grandInvested)}</td>
-          <td class="mf-num-cell">{fmtAmount(grandCurrent)}</td>
-          <td class="mf-num-cell">{fmtPct(grandAbsGainPct)}</td>
-          <td class="mf-num-cell">—</td>
+          <td class="app-num-cell">{fmtAmount(grandInvested)}</td>
+          <td class="app-num-cell">{fmtAmount(grandCurrent)}</td>
+          <td class="app-num-cell">{fmtPct(grandAbsGainPct)}</td>
+          <td class="app-num-cell">—</td>
         </tr>
       </tbody>
     </table>

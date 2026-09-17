@@ -158,31 +158,31 @@
   onDestroy(() => table?.destroy());
 </script>
 
-<main class="mf-page">
-  <header class="mf-header">
-    <h1 class="mf-title">Equity - Holding Statement</h1>
+<main class="app-page">
+  <header class="app-header">
+    <h1 class="app-title">Equity - Holding Statement</h1>
 
-    <div class="mf-header-actions">
+    <div class="app-header-actions">
       {#if status}
-        <span class="mf-status-inline">{status}</span>
+        <span class="app-status">{status}</span>
       {/if}
 
-      <div class="mf-toolbar">
-        <button class="mf-btn" onclick={() => (uploadModalOpen = true)}>
+      <div class="app-toolbar">
+        <button class="app-button" onclick={() => (uploadModalOpen = true)}>
           Upload Equity Transactions CSV
         </button>
 
-        <button class="mf-btn" onclick={refreshLtpAndReload}>
+        <button class="app-button" onclick={refreshLtpAndReload}>
           Refresh LTP
         </button>
       </div>
     </div>
   </header>
 
-  <section class="mf-table-wrap">
-    <div class="mf-table" bind:this={tableContainer}></div>
+  <section class="app-table-wrap">
+    <div class="app-table" bind:this={tableContainer}></div>
     {#if error}
-      <p class="mf-error">{error}</p>
+      <p class="app-error">{error}</p>
     {/if}
   </section>
 </main>

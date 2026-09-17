@@ -37,25 +37,25 @@
 <svelte:window onkeydown={onWindowKeydown} />
 
 {#if open}
-  <div class="mf-modal-overlay" role="presentation" onclick={onOverlayClick}>
+  <div class="app-modal-overlay" role="presentation" onclick={onOverlayClick}>
     <div
-      class="mf-modal"
+      class="app-modal"
       role="dialog"
       aria-modal="true"
       aria-label={title}
       style={`--mf-modal-width: ${width};`}
     >
-      <header class="mf-modal-header">
+      <header class="app-modal-header">
         <h2>{title}</h2>
-        <button class="mf-btn" onclick={close}>Close</button>
+        <button class="app-button" onclick={close}>Close</button>
       </header>
 
-      <div class="mf-modal-body">
+      <div class="app-modal-body">
         {@render children()}
       </div>
 
       {#if footer}
-        <footer class="mf-modal-footer">
+        <footer class="app-modal-footer">
           {@render footer()}
         </footer>
       {/if}

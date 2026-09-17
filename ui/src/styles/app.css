@@ -1,3 +1,44 @@
+:root {
+  --mf-bg: #f3f5fb;
+  --mf-surface: #ffffff;
+  --mf-border: #dde3ef;
+  --mf-text: #1e2637;
+  --mf-muted: #59647d;
+  --mf-brand: #0d6772;
+  --mf-brand-strong: #0a4e56;
+  --mf-danger: #8d2228;
+  --mf-overlay: rgba(15, 23, 42, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--mf-text);
+  background: radial-gradient(circle at top, #ecf2ff 0%, var(--mf-bg) 45%);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.app-shell {
+  padding: 0 0 16px;
+}
+
+.app-page,
 .mf-page {
   margin: 16px;
   background: var(--mf-surface);
@@ -5,10 +46,6 @@
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(8, 15, 33, 0.1);
-}
-
-.app-shell {
-  padding: 0 0 16px;
 }
 
 .report-placeholder {
@@ -73,6 +110,7 @@
   line-height: 1.6;
 }
 
+.app-header,
 .mf-header {
   display: flex;
   justify-content: space-between;
@@ -82,31 +120,34 @@
   border-bottom: 1px solid var(--mf-border);
 }
 
+.app-title,
 .mf-title {
-  /* Table header text (.tabulator) is 14px - this should read as a heading but not dominate
-     the page, so it only needs to sit slightly above that, not the ~30px it used to be. */
   font-size: 16px;
   margin: 0;
 }
 
+.app-header-actions,
 .mf-header-actions {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
+.app-status,
 .mf-status-inline {
   color: var(--mf-muted);
   font-size: 0.82rem;
   white-space: nowrap;
 }
 
+.app-toolbar,
 .mf-toolbar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
+.app-button,
 .mf-btn {
   padding: 8px 12px;
   border: 1px solid #c8d4e8;
@@ -117,25 +158,30 @@
   font-size: 0.82rem;
 }
 
+.app-button:hover,
 .mf-btn:hover {
   background: #f3f6fc;
 }
 
+.app-button:disabled,
 .mf-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
+.app-button--primary,
 .mf-btn-primary {
   background: var(--mf-brand);
   border-color: var(--mf-brand);
   color: #ffffff;
 }
 
+.app-button--primary:hover,
 .mf-btn-primary:hover {
   background: var(--mf-brand-strong);
 }
 
+.app-row-delete-button,
 .mf-row-delete-btn {
   display: inline-flex;
   align-items: center;
@@ -150,24 +196,29 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
+.app-row-delete-button:hover,
 .mf-row-delete-btn:hover {
   background: #c62828;
 }
 
+.app-row-delete-button svg,
 .mf-row-delete-btn svg {
   display: block;
 }
 
+.app-table-wrap,
 .mf-table-wrap {
   padding: 0 12px 12px;
   overflow: auto;
   max-height: calc(100vh - 140px);
 }
 
+.app-summary-wrap,
 .mf-summary-wrap {
   max-height: none;
 }
 
+.app-summary-table,
 .mf-summary-table {
   width: 100%;
   margin-top: 12px;
@@ -178,6 +229,7 @@
   font-size: 14px;
 }
 
+.app-summary-table th,
 .mf-summary-table th {
   background: #0f172a;
   color: #ffffff;
@@ -186,27 +238,33 @@
   font-weight: 700;
 }
 
+.app-summary-table th:first-child,
+.app-summary-table td:first-child,
 .mf-summary-table th:first-child,
 .mf-summary-table td:first-child {
   text-align: left;
 }
 
+.app-summary-table td,
 .mf-summary-table td {
   padding: 10px 14px;
   text-align: right;
   border-top: 1px solid var(--mf-border);
 }
 
+.app-summary-table tbody tr:nth-child(odd),
 .mf-summary-table tbody tr:nth-child(odd) {
   background: #e5f4f6;
 }
 
+.app-summary-total-row,
 .mf-summary-total-row {
   background: #d3edf0 !important;
   font-weight: 700;
   border-top: 2px solid var(--mf-border);
 }
 
+.app-table,
 .mf-table {
   margin-top: 12px;
   border: 1px solid var(--mf-border);
@@ -214,6 +272,7 @@
   overflow: hidden;
 }
 
+.app-error,
 .mf-error {
   padding: 10px 14px;
   font-size: 0.82rem;
@@ -221,6 +280,7 @@
   background: #fff2f2;
 }
 
+.app-modal-overlay,
 .mf-modal-overlay,
 .mf-txn-overlay {
   position: fixed;
@@ -232,6 +292,7 @@
   padding: 16px;
 }
 
+.app-modal,
 .mf-modal {
   width: min(var(--mf-modal-width, 640px), 100%);
   max-height: min(88vh, 860px);
@@ -244,6 +305,7 @@
   overflow: hidden;
 }
 
+.app-modal-header,
 .mf-modal-header {
   display: flex;
   justify-content: space-between;
@@ -253,17 +315,20 @@
   border-bottom: 1px solid var(--mf-border);
 }
 
+.app-modal-body,
 .mf-modal-body {
   padding: 14px 16px;
   min-height: 0;
 }
 
+.app-modal-footer,
 .mf-modal-footer {
   padding: 10px 16px;
   border-top: 1px solid var(--mf-border);
   background: #f8fafe;
 }
 
+.app-modal-actions,
 .mf-modal-actions {
   display: flex;
   align-items: center;
@@ -271,16 +336,19 @@
   gap: 8px;
 }
 
+.app-form-grid,
 .mf-form-grid {
   display: grid;
   gap: 8px;
 }
 
+.app-field-label,
 .mf-field-label {
   font-size: 0.82rem;
   font-weight: 600;
 }
 
+.app-field-input,
 .mf-field-input {
   width: 100%;
   padding: 8px 10px;
@@ -288,6 +356,7 @@
   border-radius: 8px;
 }
 
+.app-inline-form,
 .mf-inline-form {
   display: flex;
   align-items: center;
@@ -296,16 +365,19 @@
   flex-wrap: wrap;
 }
 
+.app-inline-input,
 .mf-inline-input {
   width: 220px;
 }
 
+.app-status-note,
 .mf-status-note {
   margin-right: auto;
   color: var(--mf-muted);
   font-size: 0.82rem;
 }
 
+.app-txn-modal,
 .mf-txn-modal {
   position: fixed;
   width: min(1100px, calc(100vw - 32px));
@@ -320,6 +392,7 @@
   overflow: hidden;
 }
 
+.app-txn-header,
 .mf-txn-header {
   display: flex;
   align-items: center;
@@ -331,15 +404,18 @@
   user-select: none;
 }
 
+.app-txn-title h2,
 .mf-txn-title h2 {
   font-size: 1rem;
 }
 
+.app-txn-subtitle,
 .mf-txn-subtitle {
   font-size: 0.82rem;
   color: var(--mf-muted);
 }
 
+.app-txn-body,
 .mf-txn-body {
   flex: 1;
   min-height: 0;
@@ -347,11 +423,13 @@
   padding: 8px;
 }
 
+.app-txn-table,
 .mf-txn-table {
   flex: 1;
   min-height: 0;
 }
 
+.app-txn-footer,
 .mf-txn-footer {
   padding: 6px 10px;
   border-top: 1px solid var(--mf-border);
@@ -360,6 +438,7 @@
   background: #f8fafe;
 }
 
+.app-txn-footer-grid,
 .mf-txn-footer-grid {
   display: flex;
   flex-wrap: wrap;
@@ -371,14 +450,12 @@
   font-size: 14px;
 }
 
-/* Force a consistent table header style across all holdings tables. */
 .tabulator .tabulator-header,
 .tabulator .tabulator-col {
   background: #000000 !important;
   color: #ffffff !important;
 }
 
-/* Standard zebra striping for data rows. */
 .tabulator .tabulator-tableholder .tabulator-row {
   background: #ffffff;
 }
@@ -387,7 +464,6 @@
   background: #ebebeb;
 }
 
-/* Standard footer (bottom calc) styling. */
 .tabulator .tabulator-calcs-holder .tabulator-row,
 .tabulator .tabulator-footer .tabulator-row {
   background: #b3b3b3;
@@ -395,18 +471,19 @@
   font-weight: 700;
 }
 
-/* Applied via each numeric/date column's `cssClass` (see *_table_columns.ts / *_transactions_columns.ts)
-   so figures line up vertically for easy scanning instead of shifting with each digit's natural width. */
+.app-num-cell,
 .mf-num-cell {
   font-family: ui-monospace, "Cascadia Mono", "Consolas", "SFMono-Regular", Menlo, "Liberation Mono", monospace;
   font-variant-numeric: tabular-nums;
 }
 
+.app-parent-row,
 .mf-parent-row {
   font-weight: 600;
 }
 
 @media (max-width: 900px) {
+  .app-header,
   .mf-header {
     flex-direction: column;
     align-items: flex-start;
@@ -417,15 +494,18 @@
     align-items: flex-start;
   }
 
+  .app-header-actions,
   .mf-header-actions {
     width: 100%;
     flex-wrap: wrap;
   }
 
+  .app-toolbar,
   .mf-toolbar {
     width: 100%;
   }
 
+  .app-button,
   .mf-btn {
     flex: 1;
     min-width: 160px;
