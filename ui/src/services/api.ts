@@ -301,6 +301,8 @@ declare global {
         ): Promise<ApiResult>;
         fd_bond_process_ppf_csv(filename: string, fileContent: string): Promise<ApiResult>;
         fd_bond_process_ppf_rate_csv(filename: string, fileContent: string): Promise<ApiResult>;
+        fd_bond_delete_ppf_transactions(): Promise<ApiResult>;
+        fd_bond_delete_ppf_rates(): Promise<ApiResult>;
       };
     };
   }
@@ -335,6 +337,8 @@ const REQUIRED_API_METHODS = [
   "fd_bond_update_holding",
   "fd_bond_process_ppf_csv",
   "fd_bond_process_ppf_rate_csv",
+  "fd_bond_delete_ppf_transactions",
+  "fd_bond_delete_ppf_rates",
 ] as const;
 
 function hasRequiredApiMethods(candidate: unknown): candidate is typeof window.pywebview.api {
@@ -697,6 +701,18 @@ export async function processPpfRateCsv(
   fileContentBase64: string,
 ): Promise<ApiResult> {
   const result: ApiResult = await getApi().fd_bond_process_ppf_rate_csv(filename, fileContentBase64);
+  return result;
+}
+
+/** Delete all uploaded PPF transaction rows. */
+export async function deletePpfTransactionsData(): Promise<ApiResult> {
+  const result: ApiResult = await getApi().fd_bond_delete_ppf_transactions();
+  return result;
+}
+
+/** Delete all uploaded PPF rate rows and restore fallback default rate. */
+export async function deletePpfRatesData(): Promise<ApiResult> {
+  const result: ApiResult = await getApi().fd_bond_delete_ppf_rates();
   return result;
 }
 

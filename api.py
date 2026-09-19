@@ -11,6 +11,8 @@ from compute.eq_functions import (
 )
 from compute.fd_bond_functions import (
     add_fd_bond_holding,
+    delete_ppf_interest_rates,
+    delete_ppf_transactions,
     delete_fd_bond_holding,
     get_fd_bond_holdings,
     ingest_fd_bond_holdings,
@@ -314,6 +316,30 @@ class Api:
             }
         except Exception as e:
             logger.error("Error processing PPF rate CSV: %s", e)
+            return self._error(e)
+
+    def fd_bond_delete_ppf_transactions(self) -> ApiResponse:
+        try:
+            result = delete_ppf_transactions()
+            return {
+                "status": result.get("status", "error"),
+                "message": result.get("message", "Failed to delete PPF transactions."),
+                "payload": None,
+            }
+        except Exception as e:
+            logger.error("Error deleting PPF transactions: %s", e)
+            return self._error(e)
+
+    def fd_bond_delete_ppf_rates(self) -> ApiResponse:
+        try:
+            result = delete_ppf_interest_rates()
+            return {
+                "status": result.get("status", "error"),
+                "message": result.get("message", "Failed to delete PPF rates."),
+                "payload": None,
+            }
+        except Exception as e:
+            logger.error("Error deleting PPF rates: %s", e)
             return self._error(e)
 
     def fd_bond_delete_holding(

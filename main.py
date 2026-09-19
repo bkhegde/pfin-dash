@@ -6,7 +6,6 @@ from api import Api
 
 logger = logging.getLogger(__name__)
 
-
 def _get_runtime_root() -> Path:
 	"""
 	Return the root directory that contains bundled static assets.

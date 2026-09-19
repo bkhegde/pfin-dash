@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ModalShell from "../modal_shell.svelte";
 	import {
+		deletePpfRatesData,
+		deletePpfTransactionsData,
 		processPpfRateCsv,
 		processPpfTransactionsCsv,
 		readFileAsBase64,
@@ -30,13 +32,22 @@
 
 	const PPF_RATES_TEMPLATE = [
 		"Effective From,Annual Rate %,Source",
-		"2023-04-01,7.10,DEA small savings notification",
-		"2023-07-01,7.10,DEA small savings notification",
-		"2023-10-01,7.10,DEA small savings notification",
-		"2024-01-01,7.10,DEA small savings notification",
+		"2012-04-01,8.80,Government notification",
+		"2013-04-01,8.70,Government notification",
+		"2014-04-01,8.70,Government notification",
+		"2015-04-01,8.70,Government notification",
+		"2016-04-01,8.10,Government notification",
+		"2016-10-01,8.00,Government notification",
+		"2017-04-01,7.90,Government notification",
+		"2017-07-01,7.80,Government notification",
+		"2018-01-01,7.60,Government notification",
+		"2018-10-01,8.00,Government notification",
+		"2019-07-01,7.90,Government notification",
+		"2020-04-01,7.10,Government notification",
 	].join("\n");
 
-	const canUpload = $derived(ppfFile !== null && !uploading);
+	const canUploadTransactions = $derived(ppfFile !== null && !uploading);
+	const canUploadRates = $derived(rateFile !== null && !uploading);
 
 	async function close() {
 		open = false;
@@ -46,31 +57,79 @@
 		refreshNeeded = false;
 	}
 
-	async function upload() {
+	async function uploadTransactions() {
 		if (!ppfFile) {
+			statusMsg = "Choose a PPF transactions CSV before uploading.";
 			return;
 		}
 
 		uploading = true;
-		const messages: string[] = [];
-
 		try {
 			statusMsg = `Uploading ${ppfFile.name}...`;
 			const ppfB64 = await readFileAsBase64(ppfFile);
 			const ppfRes = await processPpfTransactionsCsv(ppfFile.name, ppfB64);
-			messages.push(ppfRes.message);
-
-			if (rateFile) {
-				statusMsg = `Uploading ${rateFile.name}...`;
-				const rateB64 = await readFileAsBase64(rateFile);
-				const rateRes = await processPpfRateCsv(rateFile.name, rateB64);
-				messages.push(rateRes.message);
-			}
-
+			statusMsg = ppfRes.message;
 			refreshNeeded = ppfRes.status === "success";
-			statusMsg = messages.join(" ");
 		} catch (e) {
 			statusMsg = "Upload failed: " + String(e);
+		} finally {
+			uploading = false;
+		}
+	}
+
+	async function uploadRates() {
+		if (!rateFile) {
+			statusMsg = "Choose a PPF rates CSV before uploading.";
+			return;
+		}
+
+		uploading = true;
+		try {
+			statusMsg = `Uploading ${rateFile.name}...`;
+			const rateB64 = await readFileAsBase64(rateFile);
+			const rateRes = await processPpfRateCsv(rateFile.name, rateB64);
+			statusMsg = rateRes.message;
+			refreshNeeded = rateRes.status === "success";
+		} catch (e) {
+			statusMsg = "Upload failed: " + String(e);
+		} finally {
+			uploading = false;
+		}
+	}
+
+	async function deleteTransactions() {
+		if (!window.confirm("Delete all uploaded PPF transaction rows?")) {
+			return;
+		}
+
+		uploading = true;
+		statusMsg = "Deleting uploaded PPF transactions...";
+		try {
+			const result = await deletePpfTransactionsData();
+			statusMsg = result.message;
+			ppfFile = null;
+			refreshNeeded = result.status === "success";
+		} catch (e) {
+			statusMsg = "Delete failed: " + String(e);
+		} finally {
+			uploading = false;
+		}
+	}
+
+	async function deleteRates() {
+		if (!window.confirm("Delete all uploaded PPF rate rows and restore default fallback rate?")) {
+			return;
+		}
+
+		uploading = true;
+		statusMsg = "Deleting uploaded PPF rates...";
+		try {
+			const result = await deletePpfRatesData();
+			statusMsg = result.message;
+			rateFile = null;
+			refreshNeeded = result.status === "success";
+		} catch (e) {
+			statusMsg = "Delete failed: " + String(e);
 		} finally {
 			uploading = false;
 		}
@@ -82,10 +141,13 @@
 		const anchor = document.createElement("a");
 		anchor.href = url;
 		anchor.download = fileName;
+		anchor.style.display = "none";
 		document.body.appendChild(anchor);
 		anchor.click();
-		document.body.removeChild(anchor);
-		URL.revokeObjectURL(url);
+		setTimeout(() => {
+			document.body.removeChild(anchor);
+			URL.revokeObjectURL(url);
+		}, 1000);
 	}
 </script>
 
@@ -105,7 +167,7 @@
 				}}
 			/>
 
-			<label class="mf-field-label" for="ppf-rate-file">PPF rates CSV (optional)</label>
+			<label class="mf-field-label" for="ppf-rate-file">PPF rates CSV (separate historical file)</label>
 			<input
 				id="ppf-rate-file"
 				class="mf-field-input"
@@ -119,10 +181,10 @@
 			/>
 
 			<p class="mf-status-note">
-				Transaction CSV columns: Account Name, Transaction Date, Transaction Type, Amount, Notes (optional).
+				Transactions CSV columns: Account Name, Transaction Date, Transaction Type, Amount, Notes (optional).
 			</p>
 			<p class="mf-status-note">
-				Optional rates CSV columns: Effective From, Annual Rate % (Source optional).
+				Rates CSV columns: Effective From, Annual Rate %, Source. This is a separate historical file and can be uploaded independently of transactions.
 			</p>
 
 			<div class="mf-modal-actions" style="justify-content:flex-start; gap:8px; padding:0;">
@@ -142,6 +204,15 @@
 				</button>
 			</div>
 
+			<div class="mf-modal-actions" style="justify-content:flex-start; gap:8px; padding:0; margin-top:8px;">
+				<button class="mf-btn" type="button" disabled={uploading} onclick={deleteTransactions}>
+					Delete Uploaded Transactions
+				</button>
+				<button class="mf-btn" type="button" disabled={uploading} onclick={deleteRates}>
+					Delete Uploaded Rates
+				</button>
+			</div>
+
 			{#if statusMsg}
 				<p class="mf-status-note">{statusMsg}</p>
 			{/if}
@@ -150,7 +221,12 @@
 		{#snippet footer()}
 			<div class="mf-modal-actions">
 				<button class="mf-btn" onclick={close}>Close</button>
-				<button class="mf-btn mf-btn-primary" disabled={!canUpload} onclick={upload}>Upload</button>
+				<button class="mf-btn mf-btn-primary" disabled={!canUploadTransactions} onclick={uploadTransactions}>
+					Upload Transactions
+				</button>
+				<button class="mf-btn mf-btn-primary" disabled={!canUploadRates} onclick={uploadRates}>
+					Upload Rates
+				</button>
 			</div>
 		{/snippet}
 	</ModalShell>

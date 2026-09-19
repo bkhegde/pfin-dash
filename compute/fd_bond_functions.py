@@ -127,8 +127,14 @@ def _periodic_terminal_value(
 
 def _parse_dates(expr: pl.Expr) -> pl.Expr:
     stripped = expr.cast(pl.Utf8).str.strip_chars()
-    return (
+    iso_dates = pl.when(stripped.str.contains(r"^\d{4}-\d{2}-\d{2}$")).then(
         stripped.str.strptime(pl.Date, format="%Y-%m-%d", strict=False)
+    ).otherwise(pl.lit(None, dtype=pl.Date))
+
+    return (
+        iso_dates
+        .fill_null(stripped.str.strptime(pl.Date, format="%d-%m-%Y", strict=False))
+        .fill_null(stripped.str.strptime(pl.Date, format="%d-%m-%y", strict=False))
         .fill_null(stripped.str.strptime(pl.Date, format="%d-%b-%Y", strict=False))
         .fill_null(stripped.str.strptime(pl.Date, format="%d-%b-%y", strict=False))
         .fill_null(stripped.str.strptime(pl.Date, format="%d/%m/%Y", strict=False))
@@ -319,8 +325,11 @@ def ingest_ppf_transactions(file_name: str, file_content_b64: str) -> dict:
             .alias("txn_type")
         ).drop("txn_type_raw")
 
-        if df.filter(pl.col("txn_date").is_null()).height > 0:
-            return {"status": "error", "message": "Invalid date format in Transaction Date."}
+        if df.filter(pl.col("txn_date").is_null() | (pl.col("txn_date").dt.year() < 1900)).height > 0:
+            return {
+                "status": "error",
+                "message": "Invalid date format in Transaction Date. Use YYYY-MM-DD or DD-MM-YY/DD-MM-YYYY.",
+            }
 
         invalid_rows = df.filter(
             (pl.col("account_name") == "")
@@ -382,7 +391,12 @@ def ingest_ppf_interest_rates(file_name: str, file_content_b64: str) -> dict:
 
         header_map = {_normalize_header(col): col for col in raw_df.columns}
         effective_col = header_map.get("effectivefrom") or header_map.get("startdate") or header_map.get("date")
-        rate_col = header_map.get("annualratepct") or header_map.get("ratepct") or header_map.get("rate")
+        rate_col = (
+            header_map.get("annualratepct")
+            or header_map.get("annualrate")
+            or header_map.get("ratepct")
+            or header_map.get("rate")
+        )
         source_col = header_map.get("sourcenote") or header_map.get("source")
 
         missing_labels: list[str] = []
@@ -401,7 +415,11 @@ def ingest_ppf_interest_rates(file_name: str, file_content_b64: str) -> dict:
             source_expr.alias("source_note"),
         )
 
-        invalid_rows = df.filter(pl.col("effective_from").is_null() | (pl.col("annual_rate_pct") <= 0))
+        invalid_rows = df.filter(
+            pl.col("effective_from").is_null()
+            | (pl.col("effective_from").dt.year() < 1900)
+            | (pl.col("annual_rate_pct") <= 0)
+        )
         if invalid_rows.height > 0:
             return {
                 "status": "error",
@@ -430,6 +448,46 @@ def ingest_ppf_interest_rates(file_name: str, file_content_b64: str) -> dict:
         }
     except Exception as e:
         logger.error(f"Error ingesting PPF rate CSV: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+def delete_ppf_transactions() -> dict:
+    try:
+        conn = db.get_connection()
+        try:
+            _ensure_ppf_tables(conn)
+            deleted_rows = conn.execute("DELETE FROM ppf_transactions RETURNING 1;").fetchall()
+            deleted_count = len(deleted_rows)
+        finally:
+            conn.close()
+
+        return {
+            "status": "success",
+            "message": f"Deleted {deleted_count} PPF transaction rows.",
+        }
+    except Exception as e:
+        logger.error(f"Error deleting PPF transactions: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+def delete_ppf_interest_rates() -> dict:
+    try:
+        conn = db.get_connection()
+        try:
+            _ensure_ppf_tables(conn)
+            deleted_rows = conn.execute("DELETE FROM ppf_interest_rates RETURNING 1;").fetchall()
+            deleted_count = len(deleted_rows)
+            # Keep valuation usable after a reset by re-seeding the fallback rate.
+            _seed_default_ppf_rates(conn)
+        finally:
+            conn.close()
+
+        return {
+            "status": "success",
+            "message": f"Deleted {deleted_count} PPF rate rows and restored default fallback rate.",
+        }
+    except Exception as e:
+        logger.error(f"Error deleting PPF rates: {e}")
         return {"status": "error", "message": str(e)}
 
 
@@ -769,7 +827,7 @@ def _build_ppf_holdings_rows(as_on: date, start_entry_id: int) -> list[dict]:
                 txn_type,
                 CAST(amount AS DOUBLE) AS amount
             FROM ppf_transactions
-            WHERE txn_date <= CAST(? AS DATE)
+            WHERE txn_date BETWEEN CAST('1900-01-01' AS DATE) AND CAST(? AS DATE)
             ORDER BY account_name, txn_date, txn_type;
             """,
             [as_on.isoformat()],
